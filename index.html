@@ -1,7 +1,345 @@
-<div style="position: relative; width: 100%; height: 0; padding-top: 56.2225%;
- padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;
- border-radius: 8px; will-change: transform;">
-  <iframe loading="lazy" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;"
-    src="https://www.canva.cn/design/DAGjxtAD9Sc/WpxV3ChokJaVVvwMmYHbVg/view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
-  </iframe>
-</div>
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Library</title>
+  <style>
+    /* 全局样式 */
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 18px;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    /* 导航栏样式 */
+    nav {
+      background-color: #333;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+    }
+
+    nav a {
+      color: white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+
+    nav a:hover {
+      background-color: #ddd;
+      color: black;
+    }
+
+    /* 嵌入内容容器样式 */
+    .embed-container {
+      position: relative;
+      width: 100%;
+      height: 0;
+      padding-top: 56.2225%;
+      padding-bottom: 0;
+      box-shadow: 0 2px 8px 0 rgba(63, 69, 81, 0.16);
+      margin-top: 1.6em;
+      margin-bottom: 0.9em;
+      overflow: hidden;
+      border-radius: 8px;
+      will-change: transform;
+      background-image: url('https://aliyuncs.com/');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .embed-container iframe {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* 昼夜模式切换按钮样式 */
+    #toggle-mode {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      padding: 5px;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      z-index: 100;
+    }
+
+    /* 图片按钮样式 */
+    .mode-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 4px;
+      transition: opacity 0.3s;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .light-mode-icon {
+      display: block;
+    }
+
+    .dark-mode-icon {
+      display: none;
+    }
+
+    .dark-mode .light-mode-icon {
+      display: none;
+    }
+
+    .dark-mode .dark-mode-icon {
+      display: block;
+    }
+
+    /* 昼夜模式样式 */
+    .light-mode {
+      background-color: white;
+      color: black;
+    }
+
+    .dark-mode {
+      background-color: #121212;
+      color: white;
+    }
+
+    .dark-mode nav {
+      background-color: #222;
+    }
+
+    /* 欢迎界面样式 */
+    #welcome-screen {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 20px;
+      transition: opacity 0.5s;
+      background-image: url('https://t.alcy.cc/pc?2.19581593521871?1.832631460191581');/*电脑端*/
+      background-size: cover;
+      background-position: center;
+    }
+
+    /* 文本黑边效果 */
+    #welcome-screen h1, #welcome-screen p {
+      text-shadow: 
+        -1px -1px 0 #000,  
+         1px -1px 0 #000,
+        -1px  1px 0 #000,
+         1px  1px 0 #000;
+      color: white;
+    }
+
+    #welcome-screen h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+
+    #welcome-screen p {
+      max-width: 600px;
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    .welcome-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .welcome-buttons a {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: #333;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .welcome-buttons a:hover {
+      background-color: #555;
+    }
+
+    .dark-mode .welcome-buttons a {
+      background-color: #444;
+    }
+
+    .dark-mode .welcome-buttons a:hover {
+      background-color: #666;
+    }
+
+    /* 新增底部版权区域样式 */
+    .footer {
+      padding: 15px;
+      font-size: 0.9em;
+      color: #666;
+      background-color: #f8f8f8;
+      margin-top: 2em;
+      border-top: 1px solid #eee;
+    }
+
+    .dark-mode .footer {
+      background-color: #222;
+      color: #999;
+      border-top-color: #444;
+    }
+
+    .footer a {
+      color: #555;
+      text-decoration: none;
+    }
+
+    .dark-mode .footer a {
+      color: #bbb;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* 移动端适配 */
+    @media (max-width: 768px) {
+      /* 移动端文本大小调整 */
+      #welcome-screen h1 {
+        font-size: 2em;
+      }
+      
+      #welcome-screen p {
+        font-size: 0.9em;
+      }
+      
+      /* 移动端背景图片 */
+      #welcome-screen, .embed-container {
+        background-image: url('https://t.alcy.cc/mp?4.831917291049307');/*移动端*/
+      }
+      
+      /* 移动端按钮样式优化 */
+      .welcome-buttons a {
+        padding: 10px 20px;
+        font-size: 0.9em;
+      }
+    }
+  </style>
+</head>
+
+<body class="light-mode">
+  <!-- 昼夜模式切换按钮（图片版） -->
+  <button id="toggle-mode" onclick="toggleMode()">
+    <img src="https://s1.chu0.com/src/img/png/e3/e3d933b4828c426b80a635cce6a0323f.png?imageMogr2/auto-orient/thumbnail/!282x282r/gravity/Center/crop/282x282/quality/85/%7CimageView2/2/w/282&e=2051020800&token=1srnZGLKZ0Aqlz6dk7yF4SkiYf4eP-YrEOdM1sob:Qc6DLULYLrRTvsp2HwYwrtypcUY=" 
+         alt="白天模式" 
+         class="mode-icon light-mode-icon">
+    
+    <img src="https://s1.aigei.com/src/img/png/32/3268461bb5d249448c7d7c9b9004fe7e.png?imageMogr2/auto-orient/thumbnail/!282x282r/gravity/Center/crop/282x282/quality/85/%7CimageView2/2/w/282&e=2051020800&token=P7S2Xpzfz11vAkASLTkfHN7Fw-oOZBecqeJaxypL:HGcUwk75ULfha-ubgjCIMBKGCY0=" 
+         alt="夜间模式" 
+         class="mode-icon dark-mode-icon">
+  </button>
+
+  <!-- 导航栏 -->
+  <nav>
+    <a href="#" onclick="showContent('anime')">番剧</a>
+    <a href="#" onclick="showContent('music')">音乐</a>
+    <a href="#" onclick="showContent('movie')">电影</a>
+  </nav>
+
+  <!-- 欢迎界面 -->
+  <div id="welcome-screen">
+    <h1>欢迎来到Video Library平台</h1>
+    <p>选择您感兴趣的内容类别，开始浏览精彩内容</p>
+    <div class="welcome-buttons">
+      <a href="#" onclick="showContent('anime')">番剧</a>
+      <a href="#" onclick="showContent('music')">音乐</a>
+      <a href="#" onclick="showContent('movie')">电影</a>
+    </div>
+  </div>
+
+  <!-- 嵌入内容容器 -->
+  <div id="content-container" class="embed-container" style="display: none;">
+    <iframe loading="lazy" id="embed-iframe" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0; margin: 0;"
+      src="" allowfullscreen="allowfullscreen" allow="fullscreen">
+    </iframe>
+  </div>
+
+  <!-- 新增底部版权区域 -->
+  <div class="footer">
+    <p>
+      &copy; 2025 <span class="website-name">Video Library</span> 版权所有<br>
+      <small>
+        内容版权声明：本平台仅提供内容分享服务，仅供学习交流使用，资源来源于互联网。<br>
+        若涉及版权问题，请通过联系邮箱 <a href="mailto:advice@hongjiang-server.top">advice@hongjiang-server.top</a> 告知，我们将及时处理。
+      </small>
+    </p>
+  </div>
+
+  <script>
+    // 内容URL映射
+    const contentUrls = {
+      anime: 'https://www.canva.cn/design/DAGjxtAD9Sc/WpxV3ChokJaVVvwMmYHbVg/view?embed',
+      music: 'https://www.canva.cn/design/DAGnrfF7Igc/g9DHwFuNMs_khuAoC4NXmg/view?embed',
+      movie: 'https://www.canva.cn/design/DAGrm44FCzo/bjUZGP-Q7hJ5_X3FEiFGCw/view?embed'
+    };
+
+    // 初始化昼夜模式
+    function initMode() {
+      const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const currentMode = localStorage.getItem('mode');
+
+      if (currentMode === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.body.classList.remove('light-mode');
+      } else if (currentMode === 'light') {
+        document.body.classList.add('light-mode');
+        document.body.classList.remove('dark-mode');
+      } else if (prefersDarkMode) {
+        document.body.classList.add('dark-mode');
+        document.body.classList.remove('light-mode');
+        localStorage.setItem('mode', 'dark');
+      } else {
+        document.body.classList.add('light-mode');
+        document.body.classList.remove('dark-mode');
+        localStorage.setItem('mode', 'light');
+      }
+    }
+
+    // 切换昼夜模式
+    function toggleMode() {
+      const body = document.body;
+      body.classList.toggle('dark-mode');
+      localStorage.setItem('mode', body.classList.contains('dark-mode') ? 'dark' : 'light');
+    }
+
+    // 显示内容
+    function showContent(type) {
+      const welcomeScreen = document.getElementById('welcome-screen');
+      const contentContainer = document.getElementById('content-container');
+      const iframe = document.getElementById('embed-iframe');
+      
+      // 隐藏欢迎界面，显示内容容器
+      welcomeScreen.style.display = 'none';
+      contentContainer.style.display = 'block';
+      
+      // 设置iframe的src
+      iframe.src = contentUrls[type] || 'https://aliyuncs.com/';
+      
+      // 阻止链接默认行为
+      return false;
+    }
+
+    // 页面加载时初始化模式
+    window.onload = initMode;
+  </script>
+</body>
+
+</html>
